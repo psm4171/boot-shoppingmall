@@ -3,6 +3,7 @@ package com.psm.shoppingmall.config;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
+import com.psm.shoppingmall.security.jwt.exception.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +53,6 @@ public class SecurityConfig {
     // 암호를 암호화, 사용자가 입력한 암호가 일치하는지 검사할 때 사용하는 Bean
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 }
