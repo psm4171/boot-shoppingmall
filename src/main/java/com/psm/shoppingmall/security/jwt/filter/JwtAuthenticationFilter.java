@@ -1,6 +1,7 @@
 package com.psm.shoppingmall.security.jwt.filter;
 
 import com.psm.shoppingmall.security.jwt.exception.JwtExceptionCode;
+import com.psm.shoppingmall.security.jwt.token.JwtAuthenticationToken;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private String getAuthentication(String token){
+    private void  getAuthentication(String token){
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token);
         authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext()
