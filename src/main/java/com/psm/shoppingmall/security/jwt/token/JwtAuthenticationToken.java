@@ -9,8 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private String token;
-    private Object principal;
-    private Object credentials;
+    private Object principal; // 인증된 사용자의 주체
+    private Object credentials; // 인증에 사용되는 자격 증명
 
 
     public JwtAuthenticationToken(
@@ -23,10 +23,10 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         this.setAuthenticated(true);
     }
 
-    public JwtAuthenticationToken(String token) {
+    public JwtAuthenticationToken(String token) { // JWT 토큰을 받아서 인증 객체 생성
         super(null);
         this.token = token;
-        this.setAuthenticated(false);
+        this.setAuthenticated(false); // 인증되지 않은 상태로 설정
     }
 
     @Override
