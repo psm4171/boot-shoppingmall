@@ -11,9 +11,11 @@ import com.psm.shoppingmall.dto.RefreshTokenDto;
 import com.psm.shoppingmall.security.jwt.util.JwtTokenizer;
 import com.psm.shoppingmall.service.MemberService;
 import com.psm.shoppingmall.service.RefreshTokenService;
+import io.jsonwebtoken.Claims;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
+//import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,5 +106,37 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
+/*
+* 1. 전달 받은 유저의 아이디로 유저가 존재하는지 확인
+* 2. RefreshToken이 유효한지 체크
+* 3. AccessToken을 발급하여 기존 RefreshToken과 함께 응답
+*/
+    @PostMapping("/refreshToken")
+    public ResponseEntity requestRefresh(@RequestBody RefreshTokenDto refreshTokenDto) {
+        RefreshToken refreshToken = refreshTokenService.findRefreshToken(
+                refreshTokenDto.getRefreshToken())
+            .orElseThrow(() -> new IllegalArgumentException("Refresh Token Not Found"));
+        Claims claims = jwtTokenizer.parseRefreshToken(refreshToken.getValue());
+
+        Long memberId = Long.valueOf((String) claims.get("memberId"));
+
+        Member member = memberService.getMember(memberId)
+            .orElseThrow(() -> new IllegalArgumentException("Member Not Found"));
+
+        List roles = (List) claims.get("roles");
+        String email = claims.getSubject();
+
+        String accessToken = jwtTokenizer.createAccessToken(memberId, email, roles);
+
+        MemberLoginResponseDto loginResponse = MemberLoginResponseDto.builder()
+            .accessToken(accessToken)
+            .refreshToken(refreshTokenDto.getRefreshToken())
+            .memberId(member.getMemberId())
+            .nickName(member.getName())
+            .build();
+
+        return new ResponseEntity(loginResponse, HttpStatus.OK);
+    }
 
 }
