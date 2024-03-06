@@ -1,3 +1,30 @@
 jwt:
-  secretkey: 41711234567890123456789012345678
-  refreshkey: 41711234567890123456789012345678
+  secretKey: 47123456789012345678901234567890 # 32바이트
+  refreshKey: 47123456789012345678901234567890
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shopping_db?useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: Tmdals417!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    #     dialect: org.hibernate.community.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #defer-datasource-initialization: true
+
+
+
+
+
+
+
+
+
+
